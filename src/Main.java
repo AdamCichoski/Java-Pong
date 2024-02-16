@@ -4,12 +4,11 @@ import gameStates.*;
 
 public class Main extends PApplet{
 
-    Ball ball;
-    Paddle player;
-    Paddle opponent;
+    private Ball ball;
+    private Paddle player;
+    private Paddle opponent;
+    Screen screen;
     //Game running is set to true when the game is running; True if not game over
-
-    static GamePaused game;
     boolean gameRunning = true;
     public void settings(){
         size(800,500);
@@ -18,8 +17,7 @@ public class Main extends PApplet{
         opponent = new Paddle(this, 10, height/2);
         ball.addPaddle(player);
         ball.addPaddle(opponent);
-
-        game = new GamePaused(this);
+        screen = new Screen(this);
     }
 
     public void draw(){
@@ -63,7 +61,6 @@ public class Main extends PApplet{
 
 
     public static void testing(){
-
     }
 
 

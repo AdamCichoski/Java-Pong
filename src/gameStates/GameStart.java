@@ -1,17 +1,20 @@
 package gameStates;
 import processing.core.PApplet;
-public class GameStart extends GameState {
-
-    public GameStart(PApplet screen){
-        super(screen);
+import screenItems.*;
+public class GameStart {
+    /**
+     * Constrctor
+     * @param screen
+     */
+    public GameStart(Screen screen){
     }
 
-    public void startScreen(){
-
-    }
-
-    @Override
-    public <T extends GameState> T type() {
-        return null;
+    /**
+     *
+     * @param screen
+     */
+    public static void startScreen(PApplet screen){
+        screen.fill(0);
+        screen.rect(screen.width/3, screen.height/3, 2*(screen.width/3), 2*(screen.height/3));
     }
 }

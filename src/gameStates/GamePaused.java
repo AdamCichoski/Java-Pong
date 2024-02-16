@@ -1,25 +1,23 @@
 package gameStates;
 
-import processing.core.PApplet;
 
-public class GamePaused extends GameState{
+import processing.core.PApplet;
+import screenItems.Screen;
+
+public class GamePaused{
     private final String TYPE = "GamePaused";
 
     /**
      * Constructor
-     * @param screen
      */
-    public GamePaused(PApplet screen){
-        super(screen);
+    public GamePaused(Screen screen){
     }
 
     /**
      *
-     * @return
-     * @param <T>
+     * @param screen
      */
-    @Override
-    public <T extends GameState> T type(){
-        return (T) this;
+    public void pauseGame(PApplet screen){
+
     }
 }
