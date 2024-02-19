@@ -6,15 +6,16 @@ public class Main extends PApplet{
 
     private Ball ball;
     private Paddle player;
+
     private Paddle opponent;
     Screen screen;
     //Game running is set to true when the game is running; True if not game over
     boolean gameRunning = true;
     public void settings(){
         size(800,500);
-        player = new Paddle(this, width-20, height/2);
+        player = new Paddle(this, width-20, height/2, 10,80);
         ball = new Ball(this, width/2, height/2);
-        opponent = new Paddle(this, 10, height/2);
+        opponent = new Paddle(this, 10, height/2, 10,80);
         ball.addPaddle(player);
         ball.addPaddle(opponent);
         screen = new Screen(this);

@@ -3,9 +3,6 @@ package screenItems;
 import geometry.Rectangle;
 import processing.core.PApplet;
 public class Paddle extends Rectangle {
-
-    public final float HEIGHT = 80;
-    public final float WIDTH = 10;
     private float xPos;
     private float yPos;
     private PApplet screen;
@@ -18,7 +15,8 @@ public class Paddle extends Rectangle {
      * @param xPos inputted starting x position on the screen
      * @param yPos inputted starting y position on the screen
      */
-    public Paddle(PApplet screen, float xPos, float yPos){
+    public Paddle(PApplet screen, float xPos, float yPos, float WIDTH, float HEIGHT){
+        super(WIDTH, HEIGHT);
         this.screen = screen;
         this.xPos = xPos;
         this.yPos = yPos;
