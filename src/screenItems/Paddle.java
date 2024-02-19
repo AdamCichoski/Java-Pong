@@ -1,10 +1,11 @@
 package screenItems;
 
+import geometry.Rectangle;
 import processing.core.PApplet;
-public class Paddle {
+public class Paddle extends Rectangle {
 
-    private final float HEIGHT = 80;
-    private final float WIDTH = 10;
+    public final float HEIGHT = 80;
+    public final float WIDTH = 10;
     private float xPos;
     private float yPos;
     private PApplet screen;
@@ -24,10 +25,16 @@ public class Paddle {
         setScreenSide();
     }
 
+    /**
+     * Updating the displacement of the paddle
+     */
     public void step(){
         yPos = screen.mouseY - HEIGHT/2;
     }
 
+    /**
+     * Updates the display of the paddle
+     */
     public void render(){
         screen.rect(xPos, yPos, WIDTH, HEIGHT);
     }
@@ -41,11 +48,16 @@ public class Paddle {
     public float getY(){
         return this.yPos;
     }
-    public float getHeight(){
-        return this.HEIGHT;
+
+    /**
+     * This sets the side of the screen that the paddle is on. If it is on the left side of the
+     * screen, the value is false, otherwise it is true
+     */
+    private void setScreenSide(){
+        screenSide = xPos>screen.width/2;
     }
-    public float getWidth(){
-        return this.WIDTH;
+    public boolean getScreenSide(){
+        return screenSide;
     }
 
     /**
@@ -58,17 +70,13 @@ public class Paddle {
     public float[] getSide(String input){
         switch(input.toLowerCase()){
             case "left":
-                float[] left = {getX(), getY(), getX(), getY()+HEIGHT};
-                return left;
+                return getLeftSide();
             case "right":
-                float[] right = {getX()+WIDTH, getY(), getX()+WIDTH, getY()+HEIGHT};
-                return right;
+                return getRightSide();
             case "top":
-                float[] top = {getX(), getY(), getX()+WIDTH, getY()};
-                return top;
+                return getTop();
             case "bottom":
-                float[] bottom = {getX(), getY()+HEIGHT, getX()+WIDTH, getY()+HEIGHT};
-                return bottom;
+                return getBottom();
             default:
                 System.out.println("Invalid Input For screenItems.Paddle Side");
                 break;
@@ -87,51 +95,47 @@ public class Paddle {
     }
 
     /**
-     * This sets the side of the screen that the paddle is on. If it is on the left side of the
-     * screen, the value is false, otherwise it is true
+     * Returns an array of the side coordinates
+     * @return {leftX, topY, rightX, bottomY}
      */
-    private void setScreenSide(){
-        screenSide = xPos>screen.width/2;
-    }
-    public boolean getScreenSide(){
-        return screenSide;
-    }
-    public float getFront(){
-        return (screenSide)? xPos: xPos+WIDTH;
-    }
-
-    public boolean collision(Ball b){
-        return checkTop(b) || checkBottom(b) || checkLeft(b) || checkRight(b);
-    }
-    private boolean checkTop(Ball b){
-
-        return false;
+    public float[] getSides(){
+        float sides[] = {getX(), getY(), getX()+WIDTH, getY()+HEIGHT};
+        return sides;
     }
 
     /**
-     *
-     * @param b
-     * @return
+     * Returns the left side of the paddle
+     * @return float {x1, y1, x2, y2}
      */
-    private boolean checkBottom(Ball b){
-        return false;
+    public float[] getLeftSide(){
+        float leftSide[] = {getX()+WIDTH,getY(), getX()+WIDTH, getY()+HEIGHT};
+        return leftSide;
     }
 
     /**
-     *
-     * @param b
-     * @return
+     * Returns the right side of the paddle
+     * @return float {x1, y1, x2, y2}
      */
-    private boolean checkLeft(Ball b){
-        return false;
+    public float[] getRightSide(){
+        float rightSide[] = {getX(), getY(), getX(), getY()+HEIGHT};
+        return rightSide;
     }
 
     /**
-     *
-     * @param b
-     * @return
+     * Returns the top side of the paddle
+     * @return float {x1, y1, x2, y2}
      */
-    private boolean checkRight(Ball b){
-        return false;
+    public float[] getTop(){
+        float top[] = {getX(), getY(), getX()+WIDTH, getY()};
+        return top;
+    }
+
+    /**
+     * Returns the bottom side of the paddle
+     * @return float {x1, y1, x2, y2}
+     */
+    public float[] getBottom(){
+        float bottom[] = {getX(), getY()+HEIGHT, getX()+WIDTH, getY()+HEIGHT};
+        return bottom;
     }
 }

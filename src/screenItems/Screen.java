@@ -1,5 +1,5 @@
 package screenItems;
-import Exceptions.FrameLayoutException;
+import exceptions.FrameLayoutException;
 import processing.core.PApplet;
 import gameStates.*;
 public class Screen {

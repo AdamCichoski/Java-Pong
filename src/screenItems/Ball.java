@@ -1,5 +1,7 @@
 package screenItems;
 
+import exceptions.CollisionDetector;
+import geometry.Ellipse;
 import processing.core.PApplet;
 
 /**
@@ -9,14 +11,20 @@ import processing.core.PApplet;
  * updated in the future to handle other possible uses of the ball class.
  * @author Adam Cichoski
  */
-public class Ball {
+public class Ball extends Ellipse {
     private float x, y, startX, startY,xSpeed, ySpeed;
     private final float size =30;
-    private final float diff = size/2;
+    private final float DIFF = size/2;
     public PApplet screen;
     private Paddle[] paddles;
     private boolean screenSide;
 
+    /**
+     * Constructor
+     * @param screen
+     * @param x
+     * @param y
+     */
     public Ball(PApplet screen, float x, float y){
         startX=x;
         startY=y;
@@ -36,17 +44,16 @@ public class Ball {
         boolean screenHeightBound = getScreenHeightBound();
         Paddle usedPaddle = (getScreenSide())? paddles[0]: paddles[1];
         x+= xSpeed;
-        if(paddleCollide(usedPaddle) || x==0+diff || x == screen.width - diff){
+        if(paddleCollide(usedPaddle) || x==0+DIFF || x == screen.width - DIFF){
             xSpeed*=-1;
         }
         y+=ySpeed;
-        if(y<0+diff || y> screen.height-diff){
-            y = (screenHeightBound)? screen.height-diff: 0+diff;
+        if(y<0+DIFF || y> screen.height-DIFF){
+            y = (screenHeightBound)? screen.height-DIFF: 0+DIFF;
             ySpeed = (float) ((ySpeed > 0) ? (-1 * ((Math.random() * 3) + 5)) : ((Math.random() * 3) + 5));
         }
 
     }
-
 
     /**
      * Used to render the ball onto the screen
@@ -61,54 +68,26 @@ public class Ball {
     }
 
     /**
-     * Checks for collisions with an inputted paddle
-     * @param p is the paddle that will be checked
+     *
+     * @param paddle
+     * @return
      */
-    private boolean paddleCollide(Paddle p){
-        if(p == null){
-            return false;
-        }
-        boolean collidedFront, collidedTop, collidedBottom;
-        float paddleFront = p.getFront();
-        if((screenSide && x+diff >= paddleFront) || (!screenSide && x-diff <= paddleFront)){
-            collidedFront = frontCollision(p.getYBounds()[1], p.getYBounds()[0]);
-            collidedTop = topCollision(p);
-            collidedBottom = bottomCollision(p);
-
-            //This check switches y direction depending on where the ball hits the paddle
-            float paddleSplit = p.getY() + p.getHeight()/2;
-            if(y >= p.getYBounds()[0] && y <= p.getYBounds()[1]) {
-                ySpeed = (y > paddleSplit)? Math.abs(ySpeed): -1*Math.abs(ySpeed);
-            }
-            return collidedFront || collidedTop || collidedBottom;
-        }
-        return false;
+    public boolean paddleCollide(Paddle paddle){
+        return CollisionDetector.collideRect(paddle, this);
     }
 
-    private boolean frontCollision(float upperY, float lowerY){
-        return (y>=lowerY && y<= upperY);
-    }
-
-    private boolean topCollision(Paddle p){
-        if(y-diff == p.getYBounds()[1]){
-            ySpeed = -1* (Math.abs(ySpeed));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean bottomCollision(Paddle p){
-        if(y+diff == p.getYBounds()[0]){
-            ySpeed = Math.abs(ySpeed);
-            return true;
-        }
-        return false;
-    }
-
+    /**
+     *
+     */
     public void reset(){
         x = startX;
         y= startY;
     }
+
+    /**
+     *
+     * @param p
+     */
     public void addPaddle(Paddle p){
         if(paddles[0]!=null){
             paddles[1] = p;
@@ -116,6 +95,11 @@ public class Ball {
             paddles[0] = p;
         }
     }
+
+    /**
+     *
+     * @param p
+     */
     public void addPaddles(Paddle[] p){
         if (p.length == paddles.length){
             paddles = p;
@@ -123,12 +107,18 @@ public class Ball {
             System.out.println("Invalid screenItems.Paddle Array Size For method: addPaddles()");
         }
     }
+
     public float getY(){
         return this.y;
     }
-    public float getX(){
-        return (screenSide)? x+diff: x-diff;
+    public float getAdjustedX(){
+        return (screenSide)? getRightX(): getLeftX();
     }
+    public float getLeftX(){return x-DIFF;}
+    public float getRightX(){return x+DIFF;}
+    public float getX(){return x;}
+    public float getLowerY(){return y+DIFF;}
+    public float getUpperY(){return y-DIFF;}
     public boolean getScreenSide(){
         return this.x>screen.width/2;
     }

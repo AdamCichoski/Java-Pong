@@ -39,7 +39,7 @@ public class Main extends PApplet{
     }
 
     public void checkBoundsCollision(){
-        gameRunning = ball.getX() != width;
+        gameRunning = ball.getAdjustedX() != width;
     }
 
     public void keyPressed(){

@@ -1,4 +1,4 @@
-package EventHandler;
+package eventHandler;
 import screenItems.Screen;
 /**
  *
