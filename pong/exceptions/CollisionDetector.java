@@ -2,6 +2,7 @@ package exceptions;
 
 import geometry.Ellipse;
 import geometry.Rectangle;
+import processing.core.PApplet;
 import screenItems.Paddle;
 import screenItems.Ball;
 
@@ -10,7 +11,6 @@ import screenItems.Ball;
  * @author Adam Cichoski
  */
 public class CollisionDetector {
-
 
     /**
      *
