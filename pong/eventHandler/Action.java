@@ -1,4 +1,6 @@
 package eventHandler;
+import interactable.Button;
+import processing.core.PApplet;
 import screenItems.Screen;
 /**
  *
@@ -13,9 +15,7 @@ public class Action {
     /**
      *Checks to see if
      */
-    public static boolean pauseButtonPressed(Screen screen){
-
-
-        return true;
+    public static <S extends PApplet> boolean checkMouseClicked(S screen){
+        return screen.mousePressed;
     }
 }

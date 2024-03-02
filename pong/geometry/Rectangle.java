@@ -12,6 +12,7 @@ public class Rectangle {
     protected float x;
     protected float y;
     protected PApplet screen;
+    private short rgbColor;
 
     /**
      * Constructor
@@ -25,17 +26,37 @@ public class Rectangle {
         this.y = y;
         this.screen = screen;
     }
+
+    /**
+     *
+     * @return
+     */
     public float getLeftX(){
-        return x;
+        return this.x;
     }
+
+    /**
+     *
+     * @return
+     */
     public float getRightX(){
-        return x+WIDTH;
+        return this.x+WIDTH;
     }
+
+    /**
+     *
+     * @return
+     */
     public float getLowerY(){
-        return y;
+        return this.y;
     }
+
+    /**
+     *
+     * @return
+     */
     public float getUpperY(){
-        return y+HEIGHT;
+        return this.y+HEIGHT;
     }
 
     /**
@@ -115,6 +136,10 @@ public class Rectangle {
     public float[] getBottom(){
         float bottom[] = {getLeftX(), getUpperY(), getRightX(), getUpperY()};
         return bottom;
+    }
+
+    public void setColor(short rgbColor){
+        this.rgbColor = rgbColor;
     }
 
 }

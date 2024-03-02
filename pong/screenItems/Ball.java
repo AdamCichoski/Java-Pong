@@ -1,8 +1,11 @@
 package screenItems;
 
-import exceptions.CollisionDetector;
+import eventHandler.CollisionDetector;
+import exceptions.FrameLayoutException;
 import geometry.Ellipse;
 import processing.core.PApplet;
+
+//import screenItems.ScreenSides;
 
 /**
  * This ball class is meant to interact with Paddles for pong.Paddles are a
@@ -12,12 +15,9 @@ import processing.core.PApplet;
  * @author Adam Cichoski
  */
 public class Ball extends Ellipse {
-    private float x, y, startX, startY,xSpeed, ySpeed;
-    private final float size =30;
-    private final float DIFF = size/2;
-    public PApplet screen;
-    private Paddle[] paddles;
-    private boolean screenSide;
+    private float startX, startY,xSpeed, ySpeed,screenHeight,screenWidth;
+    private Paddle player, opponent, current;
+    private ScreenSides screenSide, screenBound;
 
     /**
      * Constructor
@@ -25,46 +25,63 @@ public class Ball extends Ellipse {
      * @param x
      * @param y
      */
-    public Ball(PApplet screen, float x, float y){
+    public Ball(PApplet screen, float x, float y, float diameter){
+        super(screen,x,y, diameter);
         startX=x;
         startY=y;
-        this.x=x;
-        this.y=y;
-        this.screen = screen;
         this.xSpeed = 5;
         this.ySpeed=5;
-        paddles = new Paddle[2];
+        screenHeight = screen.height-DIFF;
+        screenWidth = screen.width-DIFF;
     }
 
     /**
      * Sets the pace of movement for the ball to move around the map by changing x and y positions
      */
-    public void step(){
-        screenSide = getScreenSide();
-        boolean screenHeightBound = getScreenHeightBound();
-        Paddle usedPaddle = (getScreenSide())? paddles[0]: paddles[1];
-        x+= xSpeed;
-        if(paddleCollide(usedPaddle) || x==0+DIFF || x == screen.width - DIFF){
-            xSpeed*=-1;
-        }
-        y+=ySpeed;
-        if(y<0+DIFF || y> screen.height-DIFF){
-            y = (screenHeightBound)? screen.height-DIFF: 0+DIFF;
-            ySpeed = (float) ((ySpeed > 0) ? (-1 * ((Math.random() * 3) + 5)) : ((Math.random() * 3) + 5));
-        }
+    public void step() {
+        screenSide = updateScreenSide();
+        screenBound = updateScreenBound();
+        current = (screenSide == player.getScreenSide())? player: opponent;
+        updateX();
+        updateY();
+
+
+//        ySpeed = (float) ((ySpeed > 0) ? (-1 * ((Math.random() * 3) + 5)) : ((Math.random() * 3) + 5));
 
     }
 
     /**
+     *
+     */
+    public void updateY(){
+        ySpeed*=(boundsCollision())? -1:1;
+        current.getLowerY();
+        y+=ySpeed;
+    }
+
+    /**
+     *
+     */
+    public void updateX(){
+        xSpeed *= (paddleCollide(current) || getLeftX() == 0 || getRightX() == screenWidth) ? -1 : 1;
+        x+= xSpeed;
+    }
+    public boolean boundsCollision(){
+        return CollisionDetector.screenTopAndBottomCollision(this, screen.height, 0);
+    }
+    /**
      * Used to render the ball onto the screen
      */
     public void render(){
-        screen.ellipse(x,y,size,size);
+        step();
+        screen.ellipse(x,y,DIAMETER,DIAMETER);
     }
 
+    /**
+     *
+     */
     public void testRender(){
-
-        screen.ellipse(screen.mouseX, screen.mouseY, size, size);
+        screen.ellipse(screen.mouseX, screen.mouseY, DIAMETER, DIAMETER);
     }
 
     /**
@@ -72,8 +89,8 @@ public class Ball extends Ellipse {
      * @param paddle
      * @return
      */
-    public boolean paddleCollide(Paddle paddle){
-        return CollisionDetector.collideRect(paddle, this);
+    public boolean paddleCollide(Paddle paddle) {
+        return CollisionDetector.ellipseRectangleCollision(paddle, this);
     }
 
     /**
@@ -84,52 +101,29 @@ public class Ball extends Ellipse {
         y= startY;
     }
 
-    /**
-     *
-     * @param p
-     */
-    public void addPaddle(Paddle p){
-        if(paddles[0]!=null){
-            paddles[1] = p;
-        }else{
-            paddles[0] = p;
-        }
+    public void setPlayer(Paddle player){
+        this.player = player;
     }
+
+    public void setOpponent(Paddle opponent){
+        this.opponent = opponent;
+    }
+
 
     /**
-     *
-     * @param p
+     *Used to determine if the ball is in the left or right side of the screen
+     * @return True if on the right side, False if on the left side
      */
-    public void addPaddles(Paddle[] p){
-        if (p.length == paddles.length){
-            paddles = p;
-        }else{
-            System.out.println("Invalid screenItems.Paddle Array Size For method: addPaddles()");
-        }
+    public ScreenSides updateScreenSide(){
+        return this.x>super.screen.width/2? ScreenSides.RIGHT:ScreenSides.LEFT;
     }
 
-    public float getY(){
-        return this.y;
-    }
-    public float getAdjustedX(){
-        return (screenSide)? getRightX(): getLeftX();
-    }
-    public float getLeftX(){return x-DIFF;}
-    public float getRightX(){return x+DIFF;}
-    public float getX(){return x;}
-    public float getLowerY(){return y+DIFF;}
-    public float getUpperY(){return y-DIFF;}
-    public boolean getScreenSide(){
-        return this.x>screen.width/2;
+    /**
+     * Used to determine if the ball is in the upper or lower half of the screen
+     * @return True if in the upper half, False if Y is in the lower half
+     */
+    public ScreenSides updateScreenBound(){
+        return y>screen.height/2? ScreenSides.TOP : ScreenSides.BOTTOM;
     }
 
-    public boolean getScreenHeightBound(){
-        return y>screen.height/2;
-    }
-    public float getYSpeed(){
-        return this.ySpeed;
-    }
-    public float getXSpeed(){
-        return this.ySpeed;
-    }
 }

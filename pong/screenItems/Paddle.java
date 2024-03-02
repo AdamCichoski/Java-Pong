@@ -3,7 +3,8 @@ package screenItems;
 import geometry.Rectangle;
 import processing.core.PApplet;
 public class Paddle extends Rectangle {
-    private boolean screenSide;
+    private ScreenSides screenSide;
+    private PaddleType paddleType;
 
     /**
      * Constructor
@@ -14,6 +15,7 @@ public class Paddle extends Rectangle {
     public Paddle(PApplet screen, float x, float y, float WIDTH, float HEIGHT){
         super(screen,x,y, WIDTH, HEIGHT);
         setScreenSide();
+        setType();
     }
 
     /**
@@ -22,16 +24,21 @@ public class Paddle extends Rectangle {
     public void step(){
         y = screen.mouseY - HEIGHT/2;
     }
+    public void enemyStep(Ball b){
+        y = b.getY() - (HEIGHT /2);
+    }
 
     /**
      * Updates the display of the paddle
      */
     public void render(){
+        step();
         screen.rect(x, y, WIDTH, HEIGHT);
     }
 
     public void enemyRender(Ball b){
-        screen.rect(x, b.getY()-(HEIGHT/2), WIDTH, HEIGHT);
+        enemyStep(b);
+        screen.rect(x, y, WIDTH, HEIGHT);
     }
 
     /**
@@ -39,10 +46,25 @@ public class Paddle extends Rectangle {
      * screen, the value is false, otherwise it is true
      */
     private void setScreenSide(){
-        screenSide = x>screen.width/2;
+        screenSide = x>screen.width/2? ScreenSides.RIGHT: ScreenSides.LEFT;
     }
-    public boolean getScreenSide(){
+    public ScreenSides getScreenSide(){
         return screenSide;
+    }
+
+    private void setType(){
+        this.paddleType = (screenSide == ScreenSides.RIGHT)? PaddleType.PLAYER : PaddleType.OPPONENT;
+    }
+    public PaddleType getType(){
+        return paddleType;
+    }
+
+    /**
+     * Determines the
+     */
+    public enum PaddleType{
+        PLAYER,
+        OPPONENT;
     }
 
 }
