@@ -41,6 +41,9 @@ public class Screen {
         }
     }
 
+//    public boolean checkGameOver(){
+//        return screenBoundCollision()
+//    }
     /**
      * Displays the current running score
      */

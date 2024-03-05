@@ -3,6 +3,7 @@ package eventHandler;
 import exceptions.FrameLayoutException;
 import geometry.Ellipse;
 import geometry.Rectangle;
+import processing.core.PApplet;
 import screenItems.Paddle;
 import screenItems.Ball;
 
@@ -40,7 +41,7 @@ public class CollisionDetector{
     }
 
     /**
-     *
+     * Determines a collision with the top and the bottom of a rectangle with an ellipse
      * @param rect
      * @param ellipse
      * @return
@@ -67,7 +68,8 @@ public class CollisionDetector{
      * @return
      * @param <E> extends Ellipse
      */
-    public static <E extends Ellipse> boolean screenTopAndBottomCollision(E ellipse, float upperBound, float lowerBound){
+    public static <E extends Ellipse> boolean screenBoundCollision(E ellipse, float upperBound, float lowerBound){
         return (ellipse.getUpperY() >= upperBound) || (ellipse.getLowerY() <= lowerBound);
     }
+
 }

@@ -67,7 +67,7 @@ public class Ball extends Ellipse {
         x+= xSpeed;
     }
     public boolean boundsCollision(){
-        return CollisionDetector.screenTopAndBottomCollision(this, screen.height, 0);
+        return CollisionDetector.screenBoundCollision(this, screen.height, 0);
     }
     /**
      * Used to render the ball onto the screen
