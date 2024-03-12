@@ -1,10 +1,17 @@
 package screenItems;
 
 import geometry.Rectangle;
+import graphics.Colors;
 import processing.core.PApplet;
 public class Paddle extends Rectangle {
+    private short score=0;
+    private boolean hasColor = false, isPlayer;
+    private float scoreX, scoreY;
     private ScreenSides screenSide;
     private PaddleType paddleType;
+    private Ball ball;
+
+    private Colors color;
 
     /**
      * Constructor
@@ -12,20 +19,24 @@ public class Paddle extends Rectangle {
      * @param x inputted starting x position on the screen
      * @param y inputted starting y position on the screen
      */
-    public Paddle(PApplet screen, float x, float y, float WIDTH, float HEIGHT){
+    public Paddle(PApplet screen,  float x, float y, float WIDTH, float HEIGHT, Ball ball){
         super(screen,x,y, WIDTH, HEIGHT);
+        this.ball = ball;
         setScreenSide();
         setType();
+        scoreY = 40;
+        scoreX = (screenSide == ScreenSides.LEFT)? screen.width/3f: 2f*screen.width/3f;
     }
 
     /**
      * Updating the displacement of the paddle
      */
     public void step(){
-        y = screen.mouseY - HEIGHT/2;
-    }
-    public void enemyStep(Ball b){
-        y = b.getY() - (HEIGHT /2);
+        if(paddleType == PaddleType.PLAYER) {
+            y = screen.mouseY - HEIGHT / 2;
+        }else{
+            y = ball.getY() - (HEIGHT /2);
+        }
     }
 
     /**
@@ -33,13 +44,33 @@ public class Paddle extends Rectangle {
      */
     public void render(){
         step();
+        if(hasColor){
+            Colors.fill(color);
+        }
         screen.rect(x, y, WIDTH, HEIGHT);
+        Colors.fill(Colors.WHITE);
+        displayScore();
+    }
+    /**
+     *
+     * @param color
+     */
+    public void setColor(Colors color){
+        this.color = color;
+        this.hasColor = true;
+    }
+    private void displayScore(){
+        screen.text(score, scoreX, scoreY);
     }
 
-    public void enemyRender(Ball b){
-        enemyStep(b);
-        screen.rect(x, y, WIDTH, HEIGHT);
+    /**
+     *
+     */
+    public void removeColor(){
+        this.hasColor = false;
     }
+
+
 
     /**
      * This sets the side of the screen that the paddle is on. If it is on the left side of the

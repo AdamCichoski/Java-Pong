@@ -3,6 +3,7 @@ package screenItems;
 import eventHandler.CollisionDetector;
 import exceptions.FrameLayoutException;
 import geometry.Ellipse;
+import graphics.Colors;
 import processing.core.PApplet;
 
 //import screenItems.ScreenSides;
@@ -18,6 +19,8 @@ public class Ball extends Ellipse {
     private float startX, startY,xSpeed, ySpeed,screenHeight,screenWidth;
     private Paddle player, opponent, current;
     private ScreenSides screenSide, screenBound;
+    private Colors color;
+    private boolean hasColor = false;
 
     /**
      * Constructor
@@ -74,15 +77,23 @@ public class Ball extends Ellipse {
      */
     public void render(){
         step();
+        if(hasColor){
+            Colors.fill(color);
+        }
         screen.ellipse(x,y,DIAMETER,DIAMETER);
+        Colors.fill(Colors.WHITE);
     }
 
-    /**
-     *
-     */
-    public void testRender(){
-        screen.ellipse(screen.mouseX, screen.mouseY, DIAMETER, DIAMETER);
+    public void setColor(Colors color){
+        this.color = color;
+        this.hasColor = true;
     }
+
+    public void removeColor(){
+        this.hasColor = false;
+    }
+
+
 
     /**
      *
