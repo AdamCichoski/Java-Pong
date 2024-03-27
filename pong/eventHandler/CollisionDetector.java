@@ -60,6 +60,8 @@ public class CollisionDetector{
 
     }
 
+
+
     /**
      * Checks a collision between a ball and the upper and lower bounds of the screen
      * @param ellipse

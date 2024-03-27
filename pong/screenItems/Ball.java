@@ -93,7 +93,13 @@ public class Ball extends Ellipse {
         this.hasColor = false;
     }
 
-
+    /**
+     * Returns an x value according to the side of the screen the ball is on
+     * @return
+     */
+    public float getAdjustedX(){
+        return screenSide == ScreenSides.LEFT? getLeftX(): getRightX();
+    }
 
     /**
      *

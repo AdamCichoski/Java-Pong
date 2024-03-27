@@ -1,15 +1,10 @@
 import processing.core.PApplet;
 import processing.core.PFont;
-import screenItems.*;
-import time.*;
+import screenItems.Screen;
 
 public class Main extends PApplet{
-    private final int SCREEN_WIDTH = 800, SCREEN_HEIGHT = 500;
     PFont font;
     Screen screen;
-    //Game running is set to true when the game is running; True if not game over
-
-
     public static void main(String[] args) {
         String[] appletArgs = new String[] { "Main" };
         PApplet.main(appletArgs);
@@ -27,7 +22,9 @@ public class Main extends PApplet{
      *
      */
     public void settings(){
-        size(SCREEN_WIDTH,SCREEN_HEIGHT);
+        int SCREEN_WIDTH = 800;
+        int SCREEN_HEIGHT = 500;
+        size(SCREEN_WIDTH, SCREEN_HEIGHT);
         screen = new Screen(this);
     }
 
@@ -36,7 +33,7 @@ public class Main extends PApplet{
      */
     public void draw(){
         background(0,0,0);
-        screen.renderGameRunning();
+        screen.run();
         testing();
     }
 

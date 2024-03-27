@@ -35,7 +35,6 @@ public class Ellipse {
      * @return
      */
     public float getLeftX(){return x-DIFF;}
-
     /**
      *
      * @return

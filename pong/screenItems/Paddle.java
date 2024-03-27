@@ -51,6 +51,13 @@ public class Paddle extends Rectangle {
         Colors.fill(Colors.WHITE);
         displayScore();
     }
+
+    /**
+     * Used to increment the score by 1
+     */
+    public void incrementScore(){
+        score++;
+    }
     /**
      *
      * @param color
